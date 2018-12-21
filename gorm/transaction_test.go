@@ -3,7 +3,6 @@ package gorm
 import (
 	"context"
 	"errors"
-	"reflect"
 	"testing"
 
 	"github.com/DATA-DOG/go-sqlmock"
@@ -240,15 +239,6 @@ func TestTransaction_Rollback(t *testing.T) {
 
 	if txn.current != nil {
 		t.Error("failed to reset current gorm instance - txn.current is not nil")
-	}
-
-	fdb, err := gorm.Open("postgres", db)
-	fdb.Close()
-	txn = &Transaction{parent: gdb}
-
-	txn.Begin()
-	if err := txn.Rollback(); !reflect.DeepEqual(err, status.Error(codes.Unavailable, "Database connection not available")) {
-		t.Errorf("Did not receive proper error for broken DB - %s", err)
 	}
 }
 

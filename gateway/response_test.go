@@ -1,10 +1,8 @@
 package gateway
 
 import (
-	"bytes"
 	"context"
 	"encoding/json"
-	"fmt"
 	"io"
 	"net/http"
 	"net/http/httptest"
@@ -23,7 +21,7 @@ type user struct {
 }
 
 type result struct {
-	Users []*user `json:"users"`
+	Users []*user `json"users"`
 }
 
 type userWithPtr struct {
@@ -55,27 +53,19 @@ func (m *badresult) ProtoMessage()  {}
 func (m *badresult) String() string { return "" }
 
 type response struct {
-	Error   []map[string]interface{} `json:"error,omitempty"`
-	Result  []*user                  `json:"users"`
-	Success map[string]interface{}   `json:"success"`
+	Status *RestStatus `json:"success"`
+	Result []*user     `json:"users"`
 }
 
 func TestForwardResponseMessage(t *testing.T) {
-	b := &bytes.Buffer{}
-	enc := json.NewEncoder(b)
-	enc.Encode(map[string]interface{}{"code": CodeName(Created), "status": 201})
 	md := runtime.ServerMetadata{
 		HeaderMD: metadata.Pairs(
-			"status-code", CodeName(Created),
-		),
-		TrailerMD: metadata.Pairs(
-			"success-1", "message:deleted 1 item",
-			"success-1", fmt.Sprintf("fields:%q", string(b.Bytes())),
-			"success-5", "message:created 1 item",
-			"success-5", fmt.Sprintf("fields:%q", string(b.Bytes())),
+			runtime.MetadataPrefix+"status-code", CodeName(Created),
+			runtime.MetadataPrefix+"status-message", "created 1 item",
 		),
 	}
 	ctx := runtime.NewServerMetadataContext(context.Background(), md)
+
 	rw := httptest.NewRecorder()
 	ForwardResponseMessage(ctx, nil, &runtime.JSONBuiltin{}, rw, nil, &result{Users: []*user{{"Poe", 209}, {"Hemingway", 119}}})
 
@@ -92,16 +82,16 @@ func TestForwardResponseMessage(t *testing.T) {
 		t.Fatalf("failed to unmarshal JSON response: %s", err)
 	}
 
-	if v.Success["code"] != CodeName(Created) {
-		t.Errorf("invalid status code: %s - expected: %s", v.Success["code"], CodeName(Created))
+	if v.Status.Code != CodeName(Created) {
+		t.Errorf("invalid status code: %s - expected: %s", v.Status.Code, CodeName(Created))
 	}
 
-	if v.Success["status"].(float64) != http.StatusCreated {
-		t.Errorf("invalid http status code: %d - expected: %d", v.Success["status"], http.StatusCreated)
+	if v.Status.HTTPStatus != http.StatusCreated {
+		t.Errorf("invalid http status code: %d - expected: %d", v.Status.HTTPStatus, http.StatusCreated)
 	}
 
-	if v.Success["message"] != "created 1 item" {
-		t.Errorf("invalid status message: %s - expected: %s", v.Success["message"], "created 1 item")
+	if v.Status.Message != "created 1 item" {
+		t.Errorf("invalid status message: %s - expected: %s", v.Status.Message, "created 1 item")
 	}
 
 	if l := len(v.Result); l != 2 {
@@ -203,6 +193,24 @@ func TestForwardResponseStream(t *testing.T) {
 	}
 
 	dec := json.NewDecoder(rw.Body)
+
+	var sv map[string]*RestStatus
+	if err := dec.Decode(&sv); err != nil {
+		t.Fatalf("failed to unmarshal response status: %s", err)
+	}
+	if s, ok := sv["success"]; !ok {
+		t.Fatalf("invalid status response: %v (%v)", s, sv)
+	}
+	rst := sv["success"]
+	if rst.Code != CodeName(PartialContent) {
+		t.Errorf("invalid status code: %s - expected: %s", rst.Code, CodeName(PartialContent))
+	}
+	if rst.HTTPStatus != http.StatusPartialContent {
+		t.Errorf("invalid http status code: %d - expected: %d", rst.HTTPStatus, http.StatusPartialContent)
+	}
+	if rst.Message != "returned 1 item" {
+		t.Errorf("invalid status message: %s - expected: %s", rst.Message, "returned 1 item")
+	}
 
 	var rv *result
 	// test Poe
