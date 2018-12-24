@@ -101,10 +101,7 @@ func PresenceClientInterceptor() grpc.UnaryClientInterceptor {
 			return
 		}
 
-		paths, found := HeaderN(ctx, fieldPresenceMetaKey, -1)
-		if !found {
-			return
-		}
+		paths, _ := HeaderN(ctx, fieldPresenceMetaKey, -1)
 		fieldMask := &field_mask.FieldMask{Paths: paths}
 
 		// If a field with type *FieldMask exists, set the paths in it
@@ -118,7 +115,7 @@ func PresenceClientInterceptor() grpc.UnaryClientInterceptor {
 		}
 		for i := 0; i < t.NumField(); i++ {
 			f := t.Field(i)
-			if f.Type() == reflect.TypeOf(fieldMask) && f.IsNil() {
+			if f.Type() == reflect.TypeOf(fieldMask) {
 				f.Set(reflect.ValueOf(fieldMask))
 			}
 		}

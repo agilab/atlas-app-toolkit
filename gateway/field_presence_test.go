@@ -116,7 +116,7 @@ func TestUnaryServerInterceptor(t *testing.T) {
 			t.Errorf("Didn't properly set the fieldmask in the request.\ngot :%v\nwant:%v", got, want)
 		}
 	})
-	t.Run("doesn't set FieldMask if not nil", func(t *testing.T) {
+	t.Run("still set FieldMask if not nil", func(t *testing.T) {
 		// Test with good (but arbitrary) metadata, but a present field to not overwrite
 		req := &dummyReq{SomeFieldMaskField: &field_mask.FieldMask{Paths: []string{}}}
 		err := interceptor(ctx, "POST", req, nil, nil, dummyInvoker)
@@ -126,8 +126,8 @@ func TestUnaryServerInterceptor(t *testing.T) {
 		if err != nil {
 			t.Error(err.Error())
 		}
-		if !reflect.DeepEqual(req.SomeFieldMaskField, &field_mask.FieldMask{Paths: []string{}}) {
-			t.Error("Wasn't supposed to alter fieldmask in request but did")
+		if reflect.DeepEqual(req.SomeFieldMaskField, &field_mask.FieldMask{Paths: []string{}}) {
+			t.Error("Was supposed to alter fieldmask in request but did not")
 		}
 	})
 	t.Run("works if no FieldMask in request", func(t *testing.T) {
