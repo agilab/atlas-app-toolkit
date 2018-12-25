@@ -36,7 +36,7 @@ var (
 func GetJWTFieldWithTokenType(ctx context.Context, tokenType, tokenField string, keyfunc jwt.Keyfunc) (string, error) {
 	token, err := getToken(ctx, tokenType, keyfunc)
 	if err != nil {
-		return "", errMissingToken
+		return "", err
 	}
 	claims, ok := token.Claims.(jwt.MapClaims)
 	if !ok {
