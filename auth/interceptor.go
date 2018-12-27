@@ -1,7 +1,7 @@
 package auth
 
 import (
-	"context"
+	"golang.org/x/net/context"
 
 	"github.com/grpc-ecosystem/go-grpc-middleware/logging/logrus/ctxlogrus"
 	"github.com/sirupsen/logrus"
