@@ -203,6 +203,14 @@ func (t LeToken) String() string {
 	return "<="
 }
 
+type BitAndToken struct {
+	TokenBase
+}
+
+func (t BitAndToken) String() string {
+	return "&&"
+}
+
 // NullToken represents null literal.
 type NullToken struct {
 	TokenBase

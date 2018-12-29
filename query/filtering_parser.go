@@ -442,6 +442,24 @@ func (p *filteringParser) condition() (FilteringExpression, error) {
 		default:
 			return nil, &UnexpectedTokenError{p.curToken}
 		}
+	case BitAndToken:
+		if err := p.eatToken(); err != nil {
+			return nil, err
+		}
+		switch token := p.curToken.(type) {
+		case NumberToken:
+			if err := p.eatToken(); err != nil {
+				return nil, err
+			}
+			return &NumberCondition{
+				FieldPath:  strings.Split(field.Value, "."),
+				Value:      token.Value,
+				Type:       NumberCondition_BIT_AND,
+				IsNegative: false,
+			}, nil
+		default:
+			return nil, &UnexpectedTokenError{p.curToken}
+		}
 	case InToken:
 		if err := p.eatToken(); err != nil {
 			return nil, err

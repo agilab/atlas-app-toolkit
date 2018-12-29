@@ -228,6 +228,16 @@ func NumberConditionToGorm(ctx context.Context, c *query.NumberCondition, obj in
 		assocToJoin = make(map[string]struct{})
 		assocToJoin[assoc] = struct{}{}
 	}
+
+	var neg string
+	if c.IsNegative {
+		neg = "NOT"
+	}
+
+	if _, ok := c.(query.NumberCondition_BIT_AND); ok {
+		return fmt.Sprintf("%s(%s & ?>0)", neg, dbName, o), []interface{}{c.Value}, assocToJoin, nil
+	}
+
 	var o string
 	switch c.Type {
 	case query.NumberCondition_EQ:
@@ -240,10 +250,6 @@ func NumberConditionToGorm(ctx context.Context, c *query.NumberCondition, obj in
 		o = "<"
 	case query.NumberCondition_LE:
 		o = "<="
-	}
-	var neg string
-	if c.IsNegative {
-		neg = "NOT"
 	}
 	return fmt.Sprintf("%s(%s %s ?)", neg, dbName, o), []interface{}{c.Value}, assocToJoin, nil
 }
