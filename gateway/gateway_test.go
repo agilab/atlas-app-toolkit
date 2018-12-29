@@ -195,7 +195,7 @@ func TestFieldSelection(t *testing.T) {
 
 func TestFilitering(t *testing.T) {
 	// valid pagination testRequest
-	hreq, err := http.NewRequest(http.MethodGet, "http://app.com?_filter=(field1!=\"abc\" and field2==\"zxc\") and (field3 >= 7 or field4 < 9)", nil)
+	hreq, err := http.NewRequest(http.MethodGet, "http://app.com?_filter=(field1!=\"abc\" and field2&&10) and (field3 >= 7 or field4 < 9)", nil)
 	if err != nil {
 		t.Fatalf("failed to build new http testRequest: %s", err)
 	}
@@ -214,7 +214,7 @@ func TestFilitering(t *testing.T) {
 		expected := &query.Filtering{}
 
 		a := &query.StringCondition{FieldPath: []string{"field1"}, Value: "abc", Type: query.StringCondition_EQ, IsNegative: true}
-		b := &query.StringCondition{FieldPath: []string{"field2"}, Value: "zxc", Type: query.StringCondition_EQ, IsNegative: false}
+		b := &query.NumberCondition{FieldPath: []string{"field2"}, Value: 10.0, Type: query.NumberCondition_BIT_AND, IsNegative: false}
 
 		c := &query.NumberCondition{FieldPath: []string{"field3"}, Value: 7.0, Type: query.NumberCondition_GE, IsNegative: false}
 		d := &query.NumberCondition{FieldPath: []string{"field4"}, Value: 9.0, Type: query.NumberCondition_LT, IsNegative: false}

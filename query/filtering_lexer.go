@@ -428,6 +428,8 @@ func (lexer *filteringLexer) fieldOrReserved() (Token, error) {
 		return LtToken{}, nil
 	case "le":
 		return LeToken{}, nil
+	case "contains":
+		return BitAndToken{}, nil
 	case "match":
 		return MatchToken{}, nil
 	case "nomatch":
@@ -493,6 +495,13 @@ func (lexer *filteringLexer) NextToken() (Token, error) {
 			if lexer.curChar == '=' {
 				lexer.advance()
 				return InsensitiveEqToken{}, nil
+			}
+			return nil, &UnexpectedSymbolError{lexer.curChar, lexer.pos}
+		case lexer.curChar == '&':
+			lexer.advance()
+			if lexer.curChar == '&' {
+				lexer.advance()
+				return BitAndToken{}, nil
 			}
 			return nil, &UnexpectedSymbolError{lexer.curChar, lexer.pos}
 		case lexer.curChar == '\'' || lexer.curChar == '"':

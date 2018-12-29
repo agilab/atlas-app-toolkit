@@ -160,7 +160,7 @@ func (c *NumberCondition) Filter(obj interface{}) (bool, error) {
 	case NumberCondition_LE:
 		return negateIfNeeded(f <= c.Value, c.IsNegative), nil
 	case NumberCondition_BIT_AND:
-		return negateIfNeeded(f&c.Value > 0, c.IsNegative), nil
+		return negateIfNeeded(int64(f)&int64(c.Value) > 0, c.IsNegative), nil
 	default:
 		return false, &UnsupportedOperatorError{"number", c.Type.String()}
 	}

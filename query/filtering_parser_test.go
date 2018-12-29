@@ -481,8 +481,50 @@ func TestFilteringParser(t *testing.T) {
 			},
 		},
 		{
+			text: "field && 10",
+			exp: &Filtering{
+				&Filtering_NumberCondition{
+					&NumberCondition{
+						FieldPath:  []string{"field"},
+						Value:      10.0,
+						Type:       NumberCondition_BIT_AND,
+						IsNegative: false,
+					},
+				},
+			},
+		},
+		{
 			text: "",
 			exp:  nil,
+		},
+	}
+
+	p := NewFilteringParser()
+	for _, test := range tests {
+		result, err := p.Parse(test.text)
+		assert.Equal(t, test.exp, result)
+		assert.Nil(t, err)
+	}
+}
+
+func TestBitAndParser(t *testing.T) {
+
+	tests := []struct {
+		text string
+		exp  *Filtering
+	}{
+		{
+			text: "field && 10",
+			exp: &Filtering{
+				&Filtering_NumberCondition{
+					&NumberCondition{
+						FieldPath:  []string{"field"},
+						Value:      10.0,
+						Type:       NumberCondition_BIT_AND,
+						IsNegative: false,
+					},
+				},
+			},
 		},
 	}
 
