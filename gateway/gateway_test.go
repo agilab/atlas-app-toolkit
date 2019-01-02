@@ -195,7 +195,7 @@ func TestFieldSelection(t *testing.T) {
 
 func TestFilitering(t *testing.T) {
 	// valid pagination testRequest
-	hreq, err := http.NewRequest(http.MethodGet, "http://app.com?_filter=(field1!=\"abc\" and field2&&10) and (field3 >= 7 or field4 < 9)", nil)
+	hreq, err := http.NewRequest(http.MethodGet, "http://app.com?_filter=(field1!=\"abc\" and field2 contains 10) and (field3 >= 7 or field4 < 9)", nil)
 	if err != nil {
 		t.Fatalf("failed to build new http testRequest: %s", err)
 	}

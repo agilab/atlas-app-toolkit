@@ -514,7 +514,7 @@ func TestBitAndParser(t *testing.T) {
 		exp  *Filtering
 	}{
 		{
-			text: "field && 10",
+			text: "field contains 10",
 			exp: &Filtering{
 				&Filtering_NumberCondition{
 					&NumberCondition{

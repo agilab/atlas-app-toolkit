@@ -208,7 +208,7 @@ type BitAndToken struct {
 }
 
 func (t BitAndToken) String() string {
-	return "&&"
+	return "contains"
 }
 
 // NullToken represents null literal.
@@ -495,13 +495,6 @@ func (lexer *filteringLexer) NextToken() (Token, error) {
 			if lexer.curChar == '=' {
 				lexer.advance()
 				return InsensitiveEqToken{}, nil
-			}
-			return nil, &UnexpectedSymbolError{lexer.curChar, lexer.pos}
-		case lexer.curChar == '&':
-			lexer.advance()
-			if lexer.curChar == '&' {
-				lexer.advance()
-				return BitAndToken{}, nil
 			}
 			return nil, &UnexpectedSymbolError{lexer.curChar, lexer.pos}
 		case lexer.curChar == '\'' || lexer.curChar == '"':
