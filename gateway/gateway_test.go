@@ -214,7 +214,7 @@ func TestFilitering(t *testing.T) {
 		expected := &query.Filtering{}
 
 		a := &query.StringCondition{FieldPath: []string{"field1"}, Value: "abc", Type: query.StringCondition_EQ, IsNegative: true}
-		b := &query.NumberCondition{FieldPath: []string{"field2"}, Value: 10.0, Type: query.NumberCondition_BIT_AND, IsNegative: false}
+		b := &query.NumberCondition{FieldPath: []string{"field2"}, Value: 10.0, Type: query.NumberCondition_CONTAINS, IsNegative: false}
 
 		c := &query.NumberCondition{FieldPath: []string{"field3"}, Value: 7.0, Type: query.NumberCondition_GE, IsNegative: false}
 		d := &query.NumberCondition{FieldPath: []string{"field4"}, Value: 9.0, Type: query.NumberCondition_LT, IsNegative: false}

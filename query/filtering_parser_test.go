@@ -487,7 +487,7 @@ func TestFilteringParser(t *testing.T) {
 					&NumberCondition{
 						FieldPath:  []string{"field"},
 						Value:      10.0,
-						Type:       NumberCondition_BIT_AND,
+						Type:       NumberCondition_CONTAINS,
 						IsNegative: false,
 					},
 				},
@@ -520,7 +520,7 @@ func TestBitAndParser(t *testing.T) {
 					&NumberCondition{
 						FieldPath:  []string{"field"},
 						Value:      10.0,
-						Type:       NumberCondition_BIT_AND,
+						Type:       NumberCondition_CONTAINS,
 						IsNegative: false,
 					},
 				},

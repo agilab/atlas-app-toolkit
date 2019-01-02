@@ -454,7 +454,7 @@ func (p *filteringParser) condition() (FilteringExpression, error) {
 			return &NumberCondition{
 				FieldPath:  strings.Split(field.Value, "."),
 				Value:      token.Value,
-				Type:       NumberCondition_BIT_AND,
+				Type:       NumberCondition_CONTAINS,
 				IsNegative: false,
 			}, nil
 		default:

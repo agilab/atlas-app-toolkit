@@ -234,7 +234,7 @@ func NumberConditionToGorm(ctx context.Context, c *query.NumberCondition, obj in
 		neg = "NOT"
 	}
 
-	if _, ok := c.(query.NumberCondition_BIT_AND); ok {
+	if _, ok := c.(query.NumberCondition_CONTAINS); ok {
 		return fmt.Sprintf("%s(%s & ?>0)", neg, dbName, o), []interface{}{c.Value}, assocToJoin, nil
 	}
 

@@ -129,7 +129,7 @@ const (
 	NumberCondition_GE      NumberCondition_Type = 2
 	NumberCondition_LT      NumberCondition_Type = 3
 	NumberCondition_LE      NumberCondition_Type = 4
-	NumberCondition_BIT_AND NumberCondition_Type = 5
+	NumberCondition_CONTAINS NumberCondition_Type = 5
 )
 
 var NumberCondition_Type_name = map[int32]string{
@@ -138,7 +138,7 @@ var NumberCondition_Type_name = map[int32]string{
 	2: "GE",
 	3: "LT",
 	4: "LE",
-	5: "BIT_AND",
+	5: "CONTAINS",
 }
 var NumberCondition_Type_value = map[string]int32{
 	"EQ":      0,
@@ -146,7 +146,7 @@ var NumberCondition_Type_value = map[string]int32{
 	"GE":      2,
 	"LT":      3,
 	"LE":      4,
-	"BIT_AND": 5,
+	"CONTAINS": 5,
 }
 
 func (x NumberCondition_Type) String() string {

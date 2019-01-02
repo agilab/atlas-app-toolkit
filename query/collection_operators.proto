@@ -138,7 +138,7 @@ message NumberCondition {
         GE = 2;
         LT = 3;
         LE = 4;
-        BIT_AND = 5;
+        CONTAINS = 5;
     }
     Type type = 3;
     bool is_negative = 4;
