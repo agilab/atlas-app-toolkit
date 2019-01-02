@@ -234,8 +234,8 @@ func NumberConditionToGorm(ctx context.Context, c *query.NumberCondition, obj in
 		neg = "NOT"
 	}
 
-	if _, ok := c.(query.NumberCondition_CONTAINS); ok {
-		return fmt.Sprintf("%s(%s & ?>0)", neg, dbName, o), []interface{}{c.Value}, assocToJoin, nil
+	if c.Type == query.NumberCondition_CONTAINS {
+		return fmt.Sprintf("%s(%s & ?>0)", neg, dbName), []interface{}{c.Value}, assocToJoin, nil
 	}
 
 	var o string
