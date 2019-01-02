@@ -442,7 +442,7 @@ func (p *filteringParser) condition() (FilteringExpression, error) {
 		default:
 			return nil, &UnexpectedTokenError{p.curToken}
 		}
-	case BitAndToken:
+	case Contains:
 		if err := p.eatToken(); err != nil {
 			return nil, err
 		}

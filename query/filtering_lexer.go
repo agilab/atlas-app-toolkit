@@ -203,11 +203,11 @@ func (t LeToken) String() string {
 	return "<="
 }
 
-type BitAndToken struct {
+type Contains struct {
 	TokenBase
 }
 
-func (t BitAndToken) String() string {
+func (t Contains) String() string {
 	return "contains"
 }
 
@@ -429,7 +429,7 @@ func (lexer *filteringLexer) fieldOrReserved() (Token, error) {
 	case "le":
 		return LeToken{}, nil
 	case "contains":
-		return BitAndToken{}, nil
+		return Contains{}, nil
 	case "match":
 		return MatchToken{}, nil
 	case "nomatch":

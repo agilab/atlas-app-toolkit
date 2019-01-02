@@ -38,7 +38,7 @@ func TestFilteringLexer(t *testing.T) {
 		NullToken{},
 		InsensitiveEqToken{},
 		InsensitiveEqToken{},
-		BitAndToken{},
+		Contains{},
 		NumberArrayToken{Values: []float64{1, 5, 6}},
 		StringArrayToken{Values: []string{"Hello", "World"}},
 		InToken{},
