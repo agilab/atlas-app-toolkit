@@ -10,6 +10,7 @@ import (
 	"strings"
 
 	"github.com/golang/protobuf/protoc-gen-go/generator"
+	netctx "golang.org/x/net/context"
 	"google.golang.org/genproto/protobuf/field_mask"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/metadata"
@@ -93,7 +94,7 @@ type pathItem struct {
 // PresenceClientInterceptor gets the interceptor for populating a fieldmask in a
 // proto message from the fields given in the metadata/context
 func PresenceClientInterceptor() grpc.UnaryClientInterceptor {
-	return func(ctx context.Context, method string, req, reply interface{}, cc *grpc.ClientConn, invoker grpc.UnaryInvoker, opts ...grpc.CallOption) (err error) {
+	return func(ctx netctx.Context, method string, req, reply interface{}, cc *grpc.ClientConn, invoker grpc.UnaryInvoker, opts ...grpc.CallOption) (err error) {
 		defer func() {
 			err = invoker(ctx, method, req, reply, cc, opts...)
 		}()

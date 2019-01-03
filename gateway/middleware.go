@@ -1,12 +1,12 @@
 package gateway
 
 import (
-	"context"
 	"fmt"
 	"reflect"
 
 	"github.com/golang/protobuf/proto"
 	"github.com/infobloxopen/atlas-app-toolkit/query"
+	netctx "golang.org/x/net/context"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/grpclog"
 )
@@ -18,7 +18,7 @@ import (
 // Returned middleware populates collection operators from gRPC metadata if
 // they defined in a request message.
 func UnaryServerInterceptor() grpc.UnaryServerInterceptor {
-	return func(ctx context.Context, req interface{}, info *grpc.UnaryServerInfo, handler grpc.UnaryHandler) (res interface{}, err error) {
+	return func(ctx netctx.Context, req interface{}, info *grpc.UnaryServerInfo, handler grpc.UnaryHandler) (res interface{}, err error) {
 
 		if req == nil {
 			grpclog.Warningf("collection operator interceptor: empty request %+v", req)

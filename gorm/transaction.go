@@ -6,6 +6,8 @@ import (
 	"reflect"
 	"sync"
 
+	netctx "golang.org/x/net/context"
+
 	"github.com/infobloxopen/atlas-app-toolkit/rpc/errdetails"
 	"github.com/jinzhu/gorm"
 	"google.golang.org/grpc"
@@ -128,7 +130,7 @@ func (t *Transaction) Commit(ctx context.Context) error {
 // If call of grpc.UnaryHandler returns with an error the transaction
 // is aborted, otherwise committed.
 func UnaryServerInterceptor(db *gorm.DB) grpc.UnaryServerInterceptor {
-	return func(ctx context.Context, req interface{}, info *grpc.UnaryServerInfo, handler grpc.UnaryHandler) (resp interface{}, err error) {
+	return func(ctx netctx.Context, req interface{}, info *grpc.UnaryServerInfo, handler grpc.UnaryHandler) (resp interface{}, err error) {
 		// prepare new *Transaction instance
 		txn := &Transaction{parent: db}
 

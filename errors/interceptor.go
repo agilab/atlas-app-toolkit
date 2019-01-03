@@ -1,7 +1,7 @@
 package errors
 
 import (
-	"context"
+	netctx "golang.org/x/net/context"
 
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/status"
@@ -12,7 +12,7 @@ import (
 // with Details and Field Information with Mapping given.
 func UnaryServerInterceptor(mapFuncs ...MapFunc) grpc.UnaryServerInterceptor {
 
-	return func(ctx context.Context, req interface{}, info *grpc.UnaryServerInfo, handler grpc.UnaryHandler) (res interface{}, err error) {
+	return func(ctx netctx.Context, req interface{}, info *grpc.UnaryServerInfo, handler grpc.UnaryHandler) (res interface{}, err error) {
 
 		// Initialize container with mapping.
 		container := InitContainer()
