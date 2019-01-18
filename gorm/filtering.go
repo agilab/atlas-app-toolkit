@@ -133,7 +133,7 @@ func StringConditionToGorm(ctx context.Context, c *query.StringCondition, obj in
 	case query.StringCondition_EQ, query.StringCondition_IEQ:
 		o = "="
 	case query.StringCondition_MATCH:
-		o = "~"
+		o = "REGEXP"
 	case query.StringCondition_GT:
 		o = ">"
 	case query.StringCondition_GE:
