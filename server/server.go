@@ -32,6 +32,8 @@ type Server struct {
 	initializeTimeout time.Duration
 	registrars        []func(mux *http.ServeMux) error
 	allowOrigins      []string
+	allowHeaders      []string
+	extraAllowHeaders []string
 
 	// GRPCServer will be started whenever this is served
 	GRPCServer *grpc.Server
@@ -66,7 +68,7 @@ func NewServer(opts ...Option) (*Server, error) {
 			return nil, err
 		}
 	}
-	s.HTTPServer.Handler = allowCORS(mux, s.allowOrigins)
+	s.HTTPServer.Handler = allowCORS(mux, s.allowOrigins, s.extraAllowHeaders)
 
 	return s, nil
 }
@@ -133,6 +135,14 @@ func WithGateway(options ...gateway.Option) Option {
 func WithAllowOrigins(allowOrigins []string) Option {
 	return func(s *Server) error {
 		s.allowOrigins = allowOrigins
+		return nil
+	}
+}
+
+func WithAllowHeaders(allowHeaders []string) Option {
+	return func(s *Server) error {
+		s.allowHeaders = allowHeaders
+		s.extraAllowHeaders = evaluateExtraAllowHeaders(allowHeaders)
 		return nil
 	}
 }
